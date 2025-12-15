@@ -6,7 +6,7 @@ terraform {
     }
     turbonomic = {
       source  = "IBM/turbonomic"
-      version = "1.2.0"
+      version = "1.7.0"
     }
   }
   cloud {
