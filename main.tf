@@ -70,10 +70,9 @@ resource "azurerm_network_interface" "main" {
   }
 }
 
-data "turbonomic_cloud_entity_recommendation" "vm_recommendation" {
-  entity_name = local.vm_name
-  entity_type = "VirtualMachine"
-  default_size = "defaultSize"
+data "turbonomic_azurerm_linux_virtual_machine" "main" {
+  entity_name  = local.vm_name
+  default_size = "Standard_D2s_v3"
 }
 
 resource "azurerm_virtual_machine" "main" {
@@ -81,11 +80,7 @@ resource "azurerm_virtual_machine" "main" {
   location              = data.azurerm_resource_group.example.location
   resource_group_name   = data.azurerm_resource_group.example.name
   network_interface_ids = [azurerm_network_interface.main.id]
-  vm_size               = (
-    data.turbonomic_cloud_entity_recommendation.vm_recommendation.new_instance_type != "defaultsize"
-    ? data.turbonomic_cloud_entity_recommendation.vm_recommendation.new_instance_type
-    : "Standard_D2s_v3"
-  )
+  vm_size               = data.turbonomic_azurerm_linux_virtual_machine.main.new_size
 
   storage_image_reference {
     publisher = "Canonical"
