@@ -80,11 +80,8 @@ resource "azurerm_virtual_machine" "main" {
   location              = data.azurerm_resource_group.example.location
   resource_group_name   = data.azurerm_resource_group.example.name
   network_interface_ids = [azurerm_network_interface.main.id]
-  vm_size               = coalesce(
-    data.turbonomic_azurerm_linux_virtual_machine.main.new_size,
-    data.turbonomic_azurerm_linux_virtual_machine.main.current_size,
-    data.turbonomic_azurerm_linux_virtual_machine.main.default_size
-  )
+  vm_size               = data.turbonomic_azurerm_linux_virtual_machine.main.new_size
+  
 
   storage_image_reference {
     publisher = "Canonical"
